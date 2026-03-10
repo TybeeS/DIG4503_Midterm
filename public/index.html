@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PollView - Create & Vote on Polls</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="index.html">PollView</a>
+    </div>
+    <div class="nav-links">
+      <a href="#trending">Trending</a>
+      <a href="#categories">Categories</a>
+      <a href="create-poll.html" class="btn btn-outline">Create Poll</a>
+      <a href="login.html" class="btn btn-primary">Log In</a>
+      <a href="signup.html" class="btn btn-accent">Sign Up</a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Your Opinion Matters</h1>
+      <p>Create polls, share them with the world, and see what people really think. Join thousands of users making their voices heard on PollView.</p>
+      <div class="hero-actions">
+        <a href="signup.html" class="btn btn-accent btn-lg">Get Started</a>
+        <a href="#trending" class="btn btn-outline btn-lg">Browse Polls</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">12,400+</span>
+          <span class="stat-label">Polls Created</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">98,000+</span>
+          <span class="stat-label">Votes Cast</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5,200+</span>
+          <span class="stat-label">Active Users</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trending Polls Section -->
+  <section id="trending" class="section">
+    <h2 class="section-title">Trending Polls</h2>
+    <p class="section-subtitle">See what the community is voting on right now</p>
+    <div class="polls-grid">
+
+      <div class="poll-card">
+        <span class="poll-category">Technology</span>
+        <h3>Best programming language to learn in 2026?</h3>
+        <p class="poll-author">by <strong>devGuru42</strong></p>
+        <div class="poll-options">
+          <div class="poll-option">
+            <div class="option-bar" style="width: 42%"></div>
+            <span class="option-label">Python</span>
+            <span class="option-percent">42%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar" style="width: 28%"></div>
+            <span class="option-label">JavaScript</span>
+            <span class="option-percent">28%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar" style="width: 18%"></div>
+            <span class="option-label">Rust</span>
+            <span class="option-percent">18%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar" style="width: 12%"></div>
+            <span class="option-label">Go</span>
+            <span class="option-percent">12%</span>
+          </div>
+        </div>
+        <div class="poll-footer">
+          <span>1,243 votes</span>
+          <a href="login.html" class="btn btn-sm btn-primary">Vote</a>
+        </div>
+      </div>
+
+      <div class="poll-card">
+        <span class="poll-category">Food</span>
+        <h3>Pineapple on pizza?</h3>
+        <p class="poll-author">by <strong>foodieFan</strong></p>
+        <div class="poll-options">
+          <div class="poll-option">
+            <div class="option-bar yes" style="width: 54%"></div>
+            <span class="option-label">Yes, it's delicious</span>
+            <span class="option-percent">54%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar no" style="width: 46%"></div>
+            <span class="option-label">No, absolutely not</span>
+            <span class="option-percent">46%</span>
+          </div>
+        </div>
+        <div class="poll-footer">
+          <span>3,871 votes</span>
+          <a href="login.html" class="btn btn-sm btn-primary">Vote</a>
+        </div>
+      </div>
+
+      <div class="poll-card">
+        <span class="poll-category">Entertainment</span>
+        <h3>Most anticipated movie of the year?</h3>
+        <p class="poll-author">by <strong>cinemaLover</strong></p>
+        <div class="poll-options">
+          <div class="poll-option">
+            <div class="option-bar" style="width: 35%"></div>
+            <span class="option-label">Avatar 4</span>
+            <span class="option-percent">35%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar" style="width: 30%"></div>
+            <span class="option-label">The Batman II</span>
+            <span class="option-percent">30%</span>
+          </div>
+          <div class="poll-option">
+            <div class="option-bar" style="width: 35%"></div>
+            <span class="option-label">Avengers: Doomsday</span>
+            <span class="option-percent">35%</span>
+          </div>
+        </div>
+        <div class="poll-footer">
+          <span>2,109 votes</span>
+          <a href="login.html" class="btn btn-sm btn-primary">Vote</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="section-action">
+      <a href="polls.html" class="btn btn-outline btn-lg">View All Polls</a>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="section section-alt">
+    <h2 class="section-title">Browse by Category</h2>
+    <p class="section-subtitle">Find polls that match your interests</p>
+    <div class="categories-grid">
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#128187;</span>
+        <h3>Technology</h3>
+        <p>1,420 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#127917;</span>
+        <h3>Gaming</h3>
+        <p>980 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#127926;</span>
+        <h3>Music</h3>
+        <p>870 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#9917;</span>
+        <h3>Sports</h3>
+        <p>1,100 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#127828;</span>
+        <h3>Food</h3>
+        <p>640 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#127902;</span>
+        <h3>Entertainment</h3>
+        <p>1,250 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#128218;</span>
+        <h3>Education</h3>
+        <p>510 polls</p>
+      </a>
+      <a href="category.html" class="category-card">
+        <span class="category-icon">&#128172;</span>
+        <h3>Lifestyle</h3>
+        <p>730 polls</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Getting started is easy</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Create an Account</h3>
+        <p>Sign up for free to start creating and voting on polls.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Create a Poll</h3>
+        <p>Pick a topic, add your options, choose a category, and publish.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Share & Vote</h3>
+        <p>Share your poll with others and vote on polls that interest you.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>See Results</h3>
+        <p>Watch results update in real time as the community votes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to make your voice heard?</h2>
+    <p>Join PollView today and start creating polls in seconds.</p>
+    <a href="signup.html" class="btn btn-accent btn-lg">Create Your Free Account</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>PollView</h4>
+        <p>The community-driven polling platform where every opinion counts.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="index.html">Home</a>
+        <a href="polls.html">All Polls</a>
+        <a href="create-poll.html">Create Poll</a>
+        <a href="category.html">Categories</a>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <a href="login.html">Log In</a>
+        <a href="signup.html">Sign Up</a>
+        <a href="profile.html">My Profile</a>
+        <a href="my-polls.html">My Polls</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 PollView. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
