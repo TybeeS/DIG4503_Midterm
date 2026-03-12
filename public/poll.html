@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poll - PollView</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="index.html">PollView</a>
+    </div>
+    <div class="nav-links">
+      <a href="my-polls.html">My Polls</a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+
+  <!-- Poll Container -->
+  <main class="poll-page-layout">
+
+    <!-- Loading State -->
+    <div id="poll-loading" class="poll-state-card">
+      <div class="spinner"></div>
+      <p>Loading poll…</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="poll-error" class="poll-state-card hidden">
+      <div class="state-icon">&#9888;</div>
+      <h2>Poll Not Found</h2>
+      <p id="poll-error-msg">This poll doesn't exist or has been removed.</p>
+      <a href="index.html" class="btn btn-primary">Back to Home</a>
+    </div>
+
+    <!-- Expired State -->
+    <div id="poll-expired" class="poll-state-card hidden">
+      <div class="state-icon">&#128336;</div>
+      <h2>This Poll Has Closed</h2>
+      <p>The voting period for this poll has ended. You can still view the results below.</p>
+      <div id="expired-results"></div>
+      <a href="index.html" class="btn btn-outline" style="margin-top:24px;">Browse Other Polls</a>
+    </div>
+
+    <!-- Main Poll Card -->
+    <div id="poll-main" class="hidden">
+
+      <!-- Poll Header -->
+      <div class="poll-view-header">
+        <div class="poll-view-meta">
+          <span class="poll-category" id="view-category"></span>
+          <span class="poll-type-badge" id="view-type-badge"></span>
+        </div>
+        <h1 id="view-question"></h1>
+        <div class="poll-view-info">
+          <span id="view-vote-count"></span>
+          <span class="meta-divider">·</span>
+          <span id="view-time-status"></span>
+        </div>
+      </div>
+
+      <!-- ── Multiple Choice Voting ── -->
+      <div id="mc-vote-area" class="poll-vote-card hidden">
+        <p class="vote-instructions">Select one option and submit your vote.</p>
+        <div id="mc-options" class="mc-options-list"></div>
+        <div class="vote-actions">
+          <button id="mc-submit-btn" class="btn btn-primary btn-lg" disabled>Submit Vote</button>
+        </div>
+      </div>
+
+      <!-- ── Multiple Choice Results ── -->
+      <div id="mc-results-area" class="poll-vote-card hidden">
+        <p class="results-label">Results <span id="mc-total-label"></span></p>
+        <div id="mc-results-list" class="mc-results-list"></div>
+        <div class="vote-actions">
+          <a href="index.html" class="btn btn-outline">Browse More Polls</a>
+        </div>
+      </div>
+
+      <!-- ── Open Response Voting ── -->
+      <div id="or-vote-area" class="poll-vote-card hidden">
+        <p class="vote-instructions">Write your response below.</p>
+        <div class="or-textarea-wrap">
+          <textarea
+            id="or-response-input"
+            class="or-response-textarea"
+            placeholder="Type your response here…"
+            rows="5"
+          ></textarea>
+          <div class="or-char-counter-row">
+            <span id="or-char-counter" class="or-char-counter"></span>
+          </div>
+        </div>
+        <div class="vote-actions">
+          <button id="or-submit-btn" class="btn btn-primary btn-lg" disabled>Submit Response</button>
+        </div>
+      </div>
+
+      <!-- ── Open Response Results ── -->
+      <div id="or-results-area" class="poll-vote-card hidden">
+        <p class="results-label">Responses <span id="or-total-label"></span></p>
+        <div id="or-results-list" class="or-results-list">
+          <p class="no-responses-msg hidden" id="no-responses-msg">No responses yet. Be the first!</p>
+        </div>
+        <div class="vote-actions">
+          <a href="index.html" class="btn btn-outline">Browse More Polls</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="poll.js"></script>
+  <script>
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+  </script>
+</body>
+</html>

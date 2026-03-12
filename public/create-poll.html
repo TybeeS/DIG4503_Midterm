@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create a Poll - PollView</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="index.html">PollView</a>
+    </div>
+    <div class="nav-links">
+      <a href="my-polls.html">My Polls</a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1>Create a Poll</h1>
+      <p>Set up your question, choose your format, and let the community weigh in.</p>
+    </div>
+  </div>
+
+  <!-- Main Form Area -->
+  <main class="create-poll-layout">
+
+    <!-- Form -->
+    <form id="create-poll-form" class="poll-form" novalidate>
+
+      <!-- Step 1: Question -->
+      <section class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">1</span> Your Question
+        </h2>
+        <div class="form-group">
+          <label for="poll-question">Poll Question <span class="required">*</span></label>
+          <input
+            type="text"
+            id="poll-question"
+            name="question"
+            maxlength="200"
+            placeholder="e.g. What's the best programming language to learn first?"
+            autocomplete="off"
+            required
+          >
+          <span class="char-counter" id="question-counter">0 / 200</span>
+        </div>
+      </section>
+
+      <!-- Step 2: Poll Type -->
+      <section class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">2</span> Poll Type
+        </h2>
+        <div class="type-toggle">
+          <button type="button" class="type-btn active" data-type="multiple-choice">
+            <span class="type-icon">&#9745;</span>
+            <span class="type-name">Multiple Choice</span>
+            <span class="type-desc">Respondents pick from your options</span>
+          </button>
+          <button type="button" class="type-btn" data-type="open-response">
+            <span class="type-icon">&#128221;</span>
+            <span class="type-name">Open Response</span>
+            <span class="type-desc">Respondents write their own answer</span>
+          </button>
+        </div>
+        <input type="hidden" id="poll-type" name="type" value="multiple-choice">
+      </section>
+
+      <!-- Step 3a: Multiple Choice Options -->
+      <section class="form-section" id="mc-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">3</span> Answer Options
+        </h2>
+        <p class="form-hint">Add between 2 and 10 options. Drag to reorder.</p>
+        <div id="options-list" class="options-list">
+          <div class="option-row" draggable="true">
+            <span class="drag-handle" title="Drag to reorder">&#8942;</span>
+            <input type="text" class="option-input" placeholder="Option 1" maxlength="150" required>
+            <button type="button" class="remove-option-btn" aria-label="Remove option" title="Remove" disabled>&#10005;</button>
+          </div>
+          <div class="option-row" draggable="true">
+            <span class="drag-handle" title="Drag to reorder">&#8942;</span>
+            <input type="text" class="option-input" placeholder="Option 2" maxlength="150" required>
+            <button type="button" class="remove-option-btn" aria-label="Remove option" title="Remove" disabled>&#10005;</button>
+          </div>
+        </div>
+        <button type="button" id="add-option-btn" class="btn btn-outline btn-sm">
+          + Add Option
+        </button>
+        <p class="options-count-note" id="options-count-note">2 of 10 options used</p>
+      </section>
+
+      <!-- Step 3b: Open Response Options -->
+      <section class="form-section hidden" id="or-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">3</span> Response Settings
+        </h2>
+        <div class="form-group">
+          <label for="char-limit-toggle">
+            <input type="checkbox" id="char-limit-toggle" name="charLimitEnabled">
+            Set a character limit for responses
+          </label>
+        </div>
+        <div class="form-group hidden" id="char-limit-group">
+          <label for="char-limit">Character Limit <span class="required">*</span></label>
+          <input
+            type="number"
+            id="char-limit"
+            name="charLimit"
+            min="10"
+            max="10000"
+            step="10"
+            placeholder="e.g. 500"
+          >
+          <span class="field-hint">Between 10 and 10,000 characters.</span>
+        </div>
+      </section>
+
+      <!-- Step 4: Category -->
+      <section class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">4</span> Category
+        </h2>
+        <div class="form-group">
+          <label for="poll-category">Category <span class="required">*</span></label>
+          <select id="poll-category" name="category" required>
+            <option value="" disabled selected>Select a category…</option>
+            <option value="Technology">&#128187; Technology</option>
+            <option value="Gaming">&#127917; Gaming</option>
+            <option value="Music">&#127926; Music</option>
+            <option value="Sports">&#9917; Sports</option>
+            <option value="Food">&#127828; Food</option>
+            <option value="Entertainment">&#127902; Entertainment</option>
+            <option value="Education">&#128218; Education</option>
+            <option value="Lifestyle">&#128172; Lifestyle</option>
+            <option value="Other">&#128196; Other</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Step 5: Time Limit -->
+      <section class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-step-num">5</span> Time Limit <span class="optional-label">(optional)</span>
+        </h2>
+        <div class="form-group">
+          <label for="time-limit-toggle">
+            <input type="checkbox" id="time-limit-toggle" name="timeLimitEnabled">
+            Set a closing time for this poll
+          </label>
+        </div>
+        <div class="form-group hidden" id="time-limit-group">
+          <label>Poll closes after</label>
+          <div class="time-limit-row">
+            <input
+              type="number"
+              id="time-limit-value"
+              name="timeLimitValue"
+              min="1"
+              max="365"
+              placeholder="e.g. 7"
+            >
+            <select id="time-limit-unit" name="timeLimitUnit">
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days" selected>Days</option>
+              <option value="weeks">Weeks</option>
+            </select>
+          </div>
+          <span class="field-hint" id="time-limit-preview"></span>
+        </div>
+      </section>
+
+      <!-- Submit -->
+      <div class="form-actions">
+        <div id="form-error" class="form-error hidden"></div>
+        <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+          Publish Poll
+        </button>
+        <a href="index.html" class="btn btn-outline btn-lg">Cancel</a>
+      </div>
+
+    </form>
+
+    <!-- Live Preview -->
+    <aside class="poll-preview-panel">
+      <h3 class="preview-title">Live Preview</h3>
+      <div class="preview-card" id="preview-card">
+        <span class="poll-category" id="preview-category">Category</span>
+        <h4 id="preview-question" class="preview-question-text">Your question will appear here…</h4>
+
+        <!-- MC Preview -->
+        <div id="preview-mc" class="preview-options">
+          <div class="preview-option-placeholder">Option 1</div>
+          <div class="preview-option-placeholder">Option 2</div>
+        </div>
+
+        <!-- OR Preview -->
+        <div id="preview-or" class="hidden">
+          <textarea
+            class="preview-textarea"
+            id="preview-textarea"
+            placeholder="Respondents will type their answer here…"
+            disabled
+          ></textarea>
+          <span class="preview-char-note" id="preview-char-note"></span>
+        </div>
+
+        <div class="preview-meta" id="preview-meta">
+          <span id="preview-time">No time limit</span>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay hidden" id="success-modal">
+    <div class="modal">
+      <div class="modal-icon">&#10003;</div>
+      <h2>Poll Published!</h2>
+      <p id="modal-message">Your poll is now live for others to vote on.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modal-view-btn">View Poll</button>
+        <button class="btn btn-outline" id="modal-new-btn">Create Another</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="create-poll.js"></script>
+  <script>
+    // Mobile nav toggle (shared)
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+  </script>
+</body>
+</html>

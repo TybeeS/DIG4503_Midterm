@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Poll data
+data/
+
 # Environment variables
 .env
 .env.local

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Polls - PollView</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="index.html">PollView</a>
+    </div>
+    <div class="nav-links">
+      <a href="my-polls.html">My Polls</a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1>My Polls</h1>
+      <p>Polls you've created on this browser, saved automatically.</p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <main class="my-polls-page">
+
+    <div class="my-polls-page-actions">
+      <a href="create-poll.html" class="btn btn-accent">+ Create a New Poll</a>
+    </div>
+
+    <!-- Controls (shown after polls load) -->
+    <div id="polls-controls" class="polls-controls hidden">
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search your polls…"
+          autocomplete="off"
+        >
+        <button id="search-clear" class="search-clear hidden" aria-label="Clear search">&#10005;</button>
+      </div>
+      <select id="category-filter" class="filter-select">
+        <option value="">All Categories</option>
+      </select>
+      <select id="sort-select" class="filter-select">
+        <option value="newest">Newest Created</option>
+        <option value="oldest">Oldest Created</option>
+        <option value="most-voted">Most Voted</option>
+        <option value="least-voted">Least Voted</option>
+        <option value="last-voted">Last Voted</option>
+      </select>
+    </div>
+
+    <!-- No results state -->
+    <div id="no-results" class="dashboard-empty hidden">
+      <div class="dashboard-empty-icon">&#128269;</div>
+      <h3>No polls match your filters</h3>
+      <p>Try a different search or category.</p>
+    </div>
+
+    <!-- Loading -->
+    <div id="dashboard-loading" class="dashboard-status">
+      <div class="mini-spinner"></div>
+      <span>Loading your polls…</span>
+    </div>
+
+    <!-- Empty state -->
+    <div id="dashboard-empty" class="dashboard-empty hidden">
+      <div class="dashboard-empty-icon">&#128196;</div>
+      <h3>No polls yet</h3>
+      <p>Polls you create will appear here. They're saved to this browser so you can always find them.</p>
+
+    </div>
+
+    <!-- Poll grid -->
+    <div id="my-polls-grid" class="my-polls-grid hidden"></div>
+
+  </main>
+
+  <script src="my-polls.js"></script>
+  <script>
+    const menuBtn  = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+  </script>
+</body>
+</html>
