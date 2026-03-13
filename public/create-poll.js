@@ -103,6 +103,27 @@ function attachOptionListeners(row) {
   row.addEventListener('dragover', onDragOver);
   row.addEventListener('drop', onDrop);
   row.addEventListener('dragend', onDragEnd);
+
+  // Keyboard reorder via drag handle
+  const handle = row.querySelector('.drag-handle');
+  handle.tabIndex = 0;
+  handle.setAttribute('role', 'button');
+  handle.setAttribute('aria-label', 'Reorder option. Press Arrow Up or Arrow Down to move.');
+  handle.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+    e.preventDefault();
+    const rows = [...getOptionRows()];
+    const idx  = rows.indexOf(row);
+    if (e.key === 'ArrowUp' && idx > 0) {
+      rows[idx - 1].before(row);
+    } else if (e.key === 'ArrowDown' && idx < rows.length - 1) {
+      rows[idx + 1].after(row);
+    } else {
+      return;
+    }
+    updateOptionButtons();
+    handle.focus();
+  });
 }
 
 // Init existing rows

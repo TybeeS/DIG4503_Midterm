@@ -16,7 +16,7 @@
     <div class="nav-links">
       <a href="my-polls.html">My Polls</a>
     </div>
-    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+    <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
   </nav>
 
   <!-- Poll Container -->
@@ -66,6 +66,7 @@
       <div id="mc-vote-area" class="poll-vote-card hidden">
         <p class="vote-instructions">Select one option and submit your vote.</p>
         <div id="mc-options" class="mc-options-list"></div>
+        <div id="mc-vote-error" class="form-error hidden" role="alert"></div>
         <div class="vote-actions">
           <button id="mc-submit-btn" class="btn btn-primary btn-lg" disabled>Submit Vote</button>
         </div>
@@ -83,6 +84,7 @@
       <!-- ── Open Response Voting ── -->
       <div id="or-vote-area" class="poll-vote-card hidden">
         <p class="vote-instructions">Write your response below.</p>
+        <div id="or-vote-error" class="form-error hidden" role="alert"></div>
         <div class="or-textarea-wrap">
           <textarea
             id="or-response-input"
@@ -117,8 +119,14 @@
   <script>
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+    menuBtn.addEventListener('click', () => {
+      const expanded = navLinks.classList.toggle('active');
+      menuBtn.setAttribute('aria-expanded', expanded);
+    });
+    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
   </script>
 </body>
 </html>

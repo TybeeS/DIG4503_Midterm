@@ -1511,6 +1511,18 @@ a {
   justify-content: center;
 }
 
+/* ===== Focus visible ===== */
+.btn:focus-visible,
+.type-btn:focus-visible,
+.drag-handle:focus-visible,
+.mc-option-row:focus-visible,
+.filter-select:focus-visible,
+.search-input:focus-visible,
+.mobile-menu-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* ===== Utility ===== */
 .hidden {
   display: none !important;

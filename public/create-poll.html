@@ -16,7 +16,7 @@
     <div class="nav-links">
       <a href="my-polls.html">My Polls</a>
     </div>
-    <button class="mobile-menu-btn" aria-label="Toggle menu">&#9776;</button>
+    <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
   </nav>
 
   <!-- Page Header -->
@@ -180,7 +180,7 @@
 
       <!-- Submit -->
       <div class="form-actions">
-        <div id="form-error" class="form-error hidden"></div>
+        <div id="form-error" class="form-error hidden" role="alert"></div>
         <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
           Publish Poll
         </button>
@@ -239,8 +239,14 @@
     // Mobile nav toggle (shared)
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+    menuBtn.addEventListener('click', () => {
+      const expanded = navLinks.classList.toggle('active');
+      menuBtn.setAttribute('aria-expanded', expanded);
+    });
+    navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
   </script>
 </body>
 </html>

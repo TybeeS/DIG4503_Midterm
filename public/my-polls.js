@@ -113,8 +113,37 @@ function renderPolls(polls) {
     `;
 
     card.querySelector('[data-copy]').addEventListener('click', () => copyPollLink(poll.id));
-    card.querySelector('[data-remove]').addEventListener('click', () => {
-      if (confirm('Remove this poll from your dashboard? It will still be accessible by link.')) {
+    card.querySelector('[data-remove]').addEventListener('click', function () {
+      const removeBtn  = this;
+      const actionsDiv = removeBtn.closest('.my-poll-actions');
+
+      // Hide existing action buttons and show inline confirmation
+      [...actionsDiv.children].forEach(c => c.classList.add('hidden'));
+
+      const label   = document.createElement('span');
+      label.style.cssText = 'font-size:0.85rem;color:var(--text-light);align-self:center;';
+      label.textContent   = 'Remove from dashboard?';
+
+      const yesBtn  = document.createElement('button');
+      yesBtn.className   = 'btn btn-ghost btn-sm';
+      yesBtn.textContent = 'Yes, remove';
+
+      const noBtn   = document.createElement('button');
+      noBtn.className   = 'btn btn-outline btn-sm';
+      noBtn.textContent = 'Cancel';
+
+      actionsDiv.append(label, yesBtn, noBtn);
+      yesBtn.focus();
+
+      noBtn.addEventListener('click', () => {
+        label.remove();
+        yesBtn.remove();
+        noBtn.remove();
+        [...actionsDiv.children].forEach(c => c.classList.remove('hidden'));
+        removeBtn.focus();
+      });
+
+      yesBtn.addEventListener('click', () => {
         removePollId(poll.id);
         allPolls = allPolls.filter(p => p.id !== poll.id);
         card.classList.add('my-poll-card-exit');
@@ -125,11 +154,10 @@ function renderPolls(polls) {
             document.getElementById('polls-controls').classList.add('hidden');
             document.getElementById('dashboard-empty').classList.remove('hidden');
           } else if (!grid.querySelector('.my-poll-card')) {
-            // filtered view is empty but polls still exist — re-apply
             applyFilters();
           }
         }, { once: true });
-      }
+      });
     });
 
     grid.appendChild(card);

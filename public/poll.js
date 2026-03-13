@@ -130,7 +130,9 @@ function renderMCVoting() {
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit Vote';
-      alert(err.message || 'Something went wrong.');
+      const errEl = el('mc-vote-error');
+      errEl.textContent = err.message || 'Something went wrong.';
+      errEl.classList.remove('hidden');
     }
   });
 
@@ -219,7 +221,9 @@ function renderORVoting() {
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit Response';
-      alert(err.message || 'Something went wrong.');
+      const errEl = el('or-vote-error');
+      errEl.textContent = err.message || 'Something went wrong.';
+      errEl.classList.remove('hidden');
     }
   });
 
