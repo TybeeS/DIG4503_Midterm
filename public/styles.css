@@ -782,7 +782,7 @@ a {
 
 /* ===== Footer simple variant ===== */
 .footer-grid-simple {
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
 }
 
 /* ===== Poll View Page ===== */

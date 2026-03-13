@@ -23,7 +23,7 @@
   <div class="page-header">
     <div class="page-header-content">
       <h1>Create a Poll</h1>
-      <p>Set up your question, choose your format, and let the community weigh in.</p>
+      <p>Your question deserves an answer — let the people decide.</p>
     </div>
   </div>
 
@@ -94,46 +94,7 @@
         <button type="button" id="add-option-btn" class="btn btn-outline btn-sm">
           + Add Option
         </button>
-        <p class="options-count-note" id="options-count-note">2 of 10 options used</p>
-      </section>
-
-      <!-- Step 3b: Open Response Options -->
-      <section class="form-section hidden" id="or-section">
-        <h2 class="form-section-title">
-          <span class="form-step-num">3</span> Response Settings
-        </h2>
-        <div class="form-group">
-          <label for="char-limit-toggle">
-            <input type="checkbox" id="char-limit-toggle" name="charLimitEnabled">
-            Set a character limit for responses
-          </label>
-        </div>
-        <div class="form-group hidden" id="char-limit-group">
-          <label for="char-limit">Character Limit <span class="required">*</span></label>
-          <input
-            type="number"
-            id="char-limit"
-            name="charLimit"
-            min="10"
-            max="10000"
-            step="10"
-            placeholder="e.g. 500"
-          >
-          <span class="field-hint">Between 10 and 10,000 characters.</span>
-        </div>
-      </section>
-
-      <!-- Step 4: Category -->
-      <section class="form-section">
-        <h2 class="form-section-title">
-          <span class="form-step-num">4</span> Category
-        </h2>
-        <div class="form-group">
-          <label for="poll-category">Category <span class="required">*</span></label>
-          <select id="poll-category" name="category" required>
-            <option value="" disabled selected>Select a category…</option>
-            <option value="Technology">&#128187; Technology</option>
-            <option value="Gaming">&#127917; Gaming</option>
+        <p class="options-count-note" id="options-count-note>
             <option value="Music">&#127926; Music</option>
             <option value="Sports">&#9917; Sports</option>
             <option value="Food">&#127828; Food</option>
