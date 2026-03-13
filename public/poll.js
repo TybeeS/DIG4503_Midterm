@@ -24,6 +24,56 @@ function pluralize(n, word) {
   return `${n} ${word}${n === 1 ? '' : 's'}`;
 }
 
+// ── Shared result builders ────────────────────────────────────────────────────
+function buildMCResultRows(options, container) {
+  const total  = options.reduce((sum, o) => sum + o.votes, 0);
+  const sorted = [...options].sort((a, b) => b.votes - a.votes);
+  container.innerHTML = '';
+
+  options.forEach(option => {
+    const pct   = total === 0 ? 0 : Math.round((option.votes / total) * 100);
+    const isTop = total > 0 && option.text === sorted[0].text;
+    const row   = document.createElement('div');
+    row.className = 'result-row' + (isTop ? ' result-row-top' : '');
+    row.innerHTML = `
+      <div class="result-row-header">
+        <span class="result-option-text">${escapeHtml(option.text)}</span>
+        <span class="result-pct">${pct}%</span>
+      </div>
+      <div class="result-bar-track">
+        <div class="result-bar-fill" style="width: 0%" data-target="${pct}"></div>
+      </div>
+      <span class="result-vote-count">${pluralize(option.votes, 'vote')}</span>
+    `;
+    container.appendChild(row);
+  });
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    container.querySelectorAll('.result-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.target + '%';
+    });
+  }));
+
+  return total;
+}
+
+function buildORResultRows(responses, container, emptyMsg = 'No responses yet. Be the first!') {
+  container.innerHTML = '';
+  if (responses.length === 0) {
+    const msg = document.createElement('p');
+    msg.className = 'no-responses-msg';
+    msg.textContent = emptyMsg;
+    container.appendChild(msg);
+  } else {
+    [...responses].reverse().forEach(text => {
+      const card = document.createElement('div');
+      card.className = 'or-response-card';
+      card.textContent = text;
+      container.appendChild(card);
+    });
+  }
+}
+
 // ── State ─────────────────────────────────────────────────────────────────────
 let poll = null;
 
@@ -140,43 +190,11 @@ function renderMCVoting() {
 }
 
 function renderMCResults(updatedPoll) {
-  const total = updatedPoll.options.reduce((sum, o) => sum + o.votes, 0);
+  const list  = el('mc-results-list');
+  const total = buildMCResultRows(updatedPoll.options, list);
   el('mc-total-label').textContent = `· ${pluralize(total, 'vote')}`;
-
-  const list = el('mc-results-list');
-  list.innerHTML = '';
-
-  const sorted = [...updatedPoll.options].sort((a, b) => b.votes - a.votes);
-
-  updatedPoll.options.forEach(option => {
-    const pct  = total === 0 ? 0 : Math.round((option.votes / total) * 100);
-    const isTop = option.text === sorted[0].text;
-    const row  = document.createElement('div');
-    row.className = 'result-row' + (isTop ? ' result-row-top' : '');
-    row.innerHTML = `
-      <div class="result-row-header">
-        <span class="result-option-text">${escapeHtml(option.text)}</span>
-        <span class="result-pct">${pct}%</span>
-      </div>
-      <div class="result-bar-track">
-        <div class="result-bar-fill" style="width: 0%" data-target="${pct}"></div>
-      </div>
-      <span class="result-vote-count">${pluralize(option.votes, 'vote')}</span>
-    `;
-    list.appendChild(row);
-  });
-
   el('mc-vote-area').classList.add('hidden');
   el('mc-results-area').classList.remove('hidden');
-
-  // Animate bars after a brief paint delay
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      list.querySelectorAll('.result-bar-fill').forEach(bar => {
-        bar.style.width = bar.dataset.target + '%';
-      });
-    });
-  });
 }
 
 // ── Open Response Voting ──────────────────────────────────────────────────────
@@ -233,25 +251,7 @@ function renderORVoting() {
 function renderORResults(updatedPoll) {
   const responses = updatedPoll.responses;
   el('or-total-label').textContent = `· ${pluralize(responses.length, 'response')}`;
-
-  const list = el('or-results-list');
-  list.innerHTML = '';
-
-  if (responses.length === 0) {
-    const msg = document.createElement('p');
-    msg.className = 'no-responses-msg';
-    msg.textContent = 'No responses yet. Be the first!';
-    list.appendChild(msg);
-  } else {
-    // Show most recent first
-    [...responses].reverse().forEach(text => {
-      const card = document.createElement('div');
-      card.className = 'or-response-card';
-      card.textContent = text;
-      list.appendChild(card);
-    });
-  }
-
+  buildORResultRows(responses, el('or-results-list'));
   el('or-vote-area').classList.add('hidden');
   el('or-results-area').classList.remove('hidden');
 }
@@ -271,66 +271,22 @@ function renderExpiredResults() {
   `;
   container.appendChild(header);
 
+  const wrap = document.createElement('div');
+  wrap.className = 'poll-vote-card';
+  const list = document.createElement('div');
+
   if (poll.type === 'multiple-choice') {
-    const total = poll.options.reduce((sum, o) => sum + o.votes, 0);
-    const wrap  = document.createElement('div');
-    wrap.className = 'poll-vote-card';
-    wrap.innerHTML = `<p class="results-label">Final Results · ${pluralize(total, 'vote')}</p>`;
-
-    const list = document.createElement('div');
     list.className = 'mc-results-list';
-    const sorted = [...poll.options].sort((a, b) => b.votes - a.votes);
-
-    poll.options.forEach(option => {
-      const pct   = total === 0 ? 0 : Math.round((option.votes / total) * 100);
-      const isTop = option.text === sorted[0].text && total > 0;
-      const row   = document.createElement('div');
-      row.className = 'result-row' + (isTop ? ' result-row-top' : '');
-      row.innerHTML = `
-        <div class="result-row-header">
-          <span class="result-option-text">${escapeHtml(option.text)}</span>
-          <span class="result-pct">${pct}%</span>
-        </div>
-        <div class="result-bar-track">
-          <div class="result-bar-fill" style="width: 0%" data-target="${pct}"></div>
-        </div>
-        <span class="result-vote-count">${pluralize(option.votes, 'vote')}</span>
-      `;
-      list.appendChild(row);
-    });
-
-    wrap.appendChild(list);
-    container.appendChild(wrap);
-
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      list.querySelectorAll('.result-bar-fill').forEach(bar => {
-        bar.style.width = bar.dataset.target + '%';
-      });
-    }));
-
+    const total = buildMCResultRows(poll.options, list);
+    wrap.innerHTML = `<p class="results-label">Final Results · ${pluralize(total, 'vote')}</p>`;
   } else {
-    const responses = poll.responses;
-    const wrap      = document.createElement('div');
-    wrap.className  = 'poll-vote-card';
-    wrap.innerHTML  = `<p class="results-label">Responses · ${pluralize(responses.length, 'response')}</p>`;
-
-    const list = document.createElement('div');
     list.className = 'or-results-list';
-
-    if (responses.length === 0) {
-      list.innerHTML = '<p class="no-responses-msg">No responses were submitted.</p>';
-    } else {
-      [...responses].reverse().forEach(text => {
-        const card = document.createElement('div');
-        card.className = 'or-response-card';
-        card.textContent = text;
-        list.appendChild(card);
-      });
-    }
-
-    wrap.appendChild(list);
-    container.appendChild(wrap);
+    buildORResultRows(poll.responses, list, 'No responses were submitted.');
+    wrap.innerHTML = `<p class="results-label">Responses · ${pluralize(poll.responses.length, 'response')}</p>`;
   }
+
+  wrap.appendChild(list);
+  container.appendChild(wrap);
 }
 
 // ── XSS guard ─────────────────────────────────────────────────────────────────

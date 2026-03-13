@@ -239,6 +239,7 @@ function initControls() {
 async function loadDashboard() {
   const loading  = document.getElementById('dashboard-loading');
   const empty    = document.getElementById('dashboard-empty');
+  const error    = document.getElementById('dashboard-error');
   const controls = document.getElementById('polls-controls');
 
   const ids = getMyPollIds();
@@ -251,6 +252,7 @@ async function loadDashboard() {
 
   const idSet = new Set(ids);
 
+  let networkError = false;
   try {
     const res  = await fetch('/api/polls');
     const data = await res.json();
@@ -260,10 +262,15 @@ async function loadDashboard() {
     const foundIds = new Set(allPolls.map(p => p.id));
     ids.filter(id => !foundIds.has(id)).forEach(removePollId);
   } catch {
-    allPolls = [];
+    networkError = true;
   }
 
   loading.classList.add('hidden');
+
+  if (networkError) {
+    error.classList.remove('hidden');
+    return;
+  }
 
   if (allPolls.length === 0) {
     empty.classList.remove('hidden');
