@@ -36,11 +36,10 @@ function formatTimeStatus(expiresAt) {
 }
 
 function voteCount(poll) {
+  const total = poll.votes ?? 0;
   if (poll.type === 'multiple-choice') {
-    const total = (poll.options || []).reduce((s, o) => s + o.votes, 0);
     return `${total} vote${total !== 1 ? 's' : ''}`;
   }
-  const total = (poll.responses || []).length;
   return `${total} response${total !== 1 ? 's' : ''}`;
 }
 
@@ -139,10 +138,7 @@ function renderPolls(polls) {
 
 // ── Search / Filter / Sort ────────────────────────────────────────────────────
 function getTotalVotes(poll) {
-  if (poll.type === 'multiple-choice') {
-    return (poll.options || []).reduce((s, o) => s + o.votes, 0);
-  }
-  return (poll.responses || []).length;
+  return poll.votes ?? 0;
 }
 
 function applyFilters() {
@@ -225,20 +221,20 @@ async function loadDashboard() {
     return;
   }
 
-  const results = await Promise.allSettled(
-    ids.map(id => fetch(`/api/polls/${id}`).then(r => r.json()))
-  );
+  const idSet = new Set(ids);
 
-  const deadIds = [];
-  results.forEach((r, i) => {
-    if (r.status === 'fulfilled' && !r.value.error) {
-      allPolls.push(r.value);
-    } else {
-      deadIds.push(ids[i]);
-    }
-  });
+  try {
+    const res  = await fetch('/api/polls');
+    const data = await res.json();
+    allPolls = data.filter(p => idSet.has(p.id));
 
-  deadIds.forEach(removePollId);
+    // Clean up any stored IDs that no longer exist on the server
+    const foundIds = new Set(allPolls.map(p => p.id));
+    ids.filter(id => !foundIds.has(id)).forEach(removePollId);
+  } catch {
+    allPolls = [];
+  }
+
   loading.classList.add('hidden');
 
   if (allPolls.length === 0) {

@@ -1646,4 +1646,80 @@ a {
   .footer-grid-simple {
     grid-template-columns: 1fr 1fr;
   }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .polls-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrap {
+    max-width: 100%;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .poll-vote-card {
+    padding: 20px;
+  }
+
+  .poll-page-layout {
+    margin: 24px auto;
+    padding: 0 16px 48px;
+  }
+
+  .vote-actions {
+    flex-direction: column;
+  }
+
+  .vote-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .poll-view-header h1,
+  .poll-view-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .footer-grid-simple {
+    grid-template-columns: 1fr;
+  }
+
+  .pv-toast {
+    max-width: 90vw;
+    white-space: normal;
+    text-align: center;
+  }
 }

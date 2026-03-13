@@ -21,8 +21,8 @@ function loadPolls() {
   }
 }
 
-function savePolls() {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(polls, null, 2));
+async function savePolls() {
+  await fs.promises.writeFile(DATA_FILE, JSON.stringify(polls, null, 2));
 }
 
 // ── In-memory store, seeded from disk ─────────────────────────────────────────
@@ -44,8 +44,8 @@ const CATEGORIES = [
 
 // GET /api/polls — list all polls (summary only)
 app.get('/api/polls', (req, res) => {
-  const summary = polls.map(({ id, question, type, category, createdAt, expiresAt, votes }) => ({
-    id, question, type, category, createdAt, expiresAt, votes,
+  const summary = polls.map(({ id, question, type, category, createdAt, expiresAt, votes, lastVotedAt }) => ({
+    id, question, type, category, createdAt, expiresAt, votes, lastVotedAt,
   }));
   res.json(summary);
 });
@@ -58,7 +58,7 @@ app.get('/api/polls/:id', (req, res) => {
 });
 
 // POST /api/polls — create a poll
-app.post('/api/polls', (req, res) => {
+app.post('/api/polls', async (req, res) => {
   const { question, type, category, options, charLimit, timeLimit } = req.body;
 
   // ── Validation ──────────────────────────────────────────────────────────────
@@ -131,12 +131,12 @@ app.post('/api/polls', (req, res) => {
   poll.lastVotedAt = null;
 
   polls.push(poll);
-  savePolls();
+  await savePolls();
   res.status(201).json(poll);
 });
 
 // POST /api/polls/:id/vote — cast a vote
-app.post('/api/polls/:id/vote', (req, res) => {
+app.post('/api/polls/:id/vote', async (req, res) => {
   const poll = polls.find(p => p.id === req.params.id);
   if (!poll) return res.status(404).json({ error: 'Poll not found.' });
 
@@ -171,7 +171,7 @@ app.post('/api/polls/:id/vote', (req, res) => {
   }
 
   poll.lastVotedAt = new Date().toISOString();
-  savePolls();
+  await savePolls();
   res.json(poll);
 });
 
