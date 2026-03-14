@@ -4,13 +4,13 @@ PollView is a website that allows users can create polls on a variety of topics 
 
 ### Features:
 - Easy creation of polls of various types, including multiple choice and open-ended responses.
-- Generate link to poll for others to acces and vote on.
+- Generate link to poll for others to access and vote on.
 - View dashboard of created polls with the results of various polls displayed as they occur.
 - Search/filter polls by category (e.g., politics, entertainment) and creation/voting timeframe.
 
 ### Techstack: 
 - Node.js
-- Tailwind CSS for styling
+- CSS for styling
 - Render for deployment
 
 ### What I Learned:
