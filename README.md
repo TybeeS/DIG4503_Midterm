@@ -12,3 +12,7 @@ PollView is a website that allows users can create polls on a variety of topics 
 - Node.js
 - Tailwind CSS for styling
 - Render for deployment
+
+### What I Learned:
+
+This project was the first time I had ever used AI to develop a type of "web service." I have developed static sites before, but PollView required much more attention towards maintaining and receiving data. I also learned how to be more involved in my conversations with Claude. Instead of just asking it to do certain things, I would look over its decision-making and make my own choices in the number of times I was presented with them.
