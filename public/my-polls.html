@@ -16,6 +16,11 @@
     <div class="nav-links">
       <a href="my-polls.html">My Polls</a>
     </div>
+    <div class="nav-auth">
+      <span id="nav-user-email" class="nav-user-email"></span>
+      <button id="nav-logout-btn" class="btn btn-outline btn-sm" style="display:none">Log Out</button>
+      <a id="nav-login-link" href="login.html" class="btn btn-primary btn-sm">Log In</a>
+    </div>
     <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
   </nav>
 
@@ -23,7 +28,7 @@
   <div class="page-header">
     <div class="page-header-content">
       <h1>My Polls</h1>
-      <p>Polls you've created on this browser, saved automatically.</p>
+      <p>Polls linked to your account.</p>
     </div>
   </div>
 
@@ -66,6 +71,14 @@
       <p>Try a different search or category.</p>
     </div>
 
+    <!-- Not logged in -->
+    <div id="dashboard-login" class="dashboard-empty hidden">
+      <div class="dashboard-empty-icon">&#128274;</div>
+      <h3>You're not logged in</h3>
+      <p>Log in to see and manage the polls you've created.</p>
+      <a href="login.html" class="btn btn-primary" style="margin-top:16px">Log In</a>
+    </div>
+
     <!-- Loading -->
     <div id="dashboard-loading" class="dashboard-status">
       <div class="mini-spinner"></div>
@@ -92,7 +105,8 @@
 
   </main>
 
-  <script src="my-polls.js"></script>
+  <script type="module" src="my-polls.js"></script>
+  <script type="module" src="auth-nav.js"></script>
   <script>
     const menuBtn  = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');

@@ -94,7 +94,7 @@ a {
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   padding: 16px 40px;
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -114,6 +114,7 @@ a {
   display: flex;
   align-items: center;
   gap: 24px;
+  margin-left: auto;
 }
 
 .nav-links > a:not(.btn) {
@@ -1704,6 +1705,119 @@ a {
 
   .modal-actions .btn {
     width: 100%;
+  }
+}
+
+/* ===== Auth Nav ===== */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-user-email {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Auth Pages (Login / Register) ===== */
+.auth-page {
+  min-height: calc(100vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.auth-card .form-group {
+  margin-bottom: 16px;
+}
+
+.auth-card .form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.auth-card .form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.auth-card .form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--white);
+}
+
+.auth-card .btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.auth-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  min-height: 20px;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.auth-switch a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .nav-user-email {
+    display: none;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
   }
 }
 

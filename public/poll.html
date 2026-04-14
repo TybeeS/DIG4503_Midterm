@@ -16,6 +16,11 @@
     <div class="nav-links">
       <a href="my-polls.html">My Polls</a>
     </div>
+    <div class="nav-auth">
+      <span id="nav-user-email" class="nav-user-email"></span>
+      <button id="nav-logout-btn" class="btn btn-outline btn-sm" style="display:none">Log Out</button>
+      <a id="nav-login-link" href="login.html" class="btn btn-primary btn-sm">Log In</a>
+    </div>
     <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
   </nav>
 
@@ -116,6 +121,7 @@
   </main>
 
   <script src="poll.js"></script>
+  <script type="module" src="auth-nav.js"></script>
   <script>
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');

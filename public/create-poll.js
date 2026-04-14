@@ -1,3 +1,13 @@
+// ── Firebase auth ─────────────────────────────────────────────────────────────
+import { auth } from './firebase-init.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+let currentUser = null;
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if (!user) window.location.href = 'login.html';
+});
+
 // ── Selectors ────────────────────────────────────────────────────────────────
 const form            = document.getElementById('create-poll-form');
 const questionInput   = document.getElementById('poll-question');
@@ -367,6 +377,13 @@ form.addEventListener('submit', async (e) => {
     };
   }
 
+  if (!currentUser) {
+    showError('You must be logged in to create a poll.');
+    return;
+  }
+
+  payload.createdBy = currentUser.uid;
+
   submitBtn.disabled = true;
   submitBtn.textContent = 'Publishing…';
 
@@ -382,13 +399,6 @@ form.addEventListener('submit', async (e) => {
     if (!res.ok) {
       throw new Error(data.error || 'Failed to create poll.');
     }
-
-    // Save poll ID to localStorage so it shows in the dashboard
-    try {
-      const stored = JSON.parse(localStorage.getItem('pollview_my_polls')) || [];
-      stored.push(data.id);
-      localStorage.setItem('pollview_my_polls', JSON.stringify(stored));
-    } catch { /* storage unavailable */ }
 
     // Show success modal
     modalMessage.textContent = `"${data.question}" is now live!`;

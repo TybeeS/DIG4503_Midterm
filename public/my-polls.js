@@ -1,18 +1,6 @@
-// ── localStorage helpers ──────────────────────────────────────────────────────
-const STORAGE_KEY = 'pollview_my_polls';
-
-function getMyPollIds() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch {
-    return [];
-  }
-}
-
-function removePollId(id) {
-  const ids = getMyPollIds().filter(i => i !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-}
+// ── Firebase auth ─────────────────────────────────────────────────────────────
+import { auth } from './firebase-init.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
 function escapeHtml(str) {
@@ -68,6 +56,7 @@ function showToast(msg) {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let allPolls = [];
+let activeUid = null;
 
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderPolls(polls) {
@@ -108,7 +97,7 @@ function renderPolls(polls) {
       <div class="my-poll-actions">
         <a href="poll.html?id=${poll.id}" class="btn btn-primary btn-sm">View Poll</a>
         <button class="btn btn-outline btn-sm" data-copy="${poll.id}">Copy Link</button>
-        <button class="btn btn-ghost btn-sm" data-remove="${poll.id}">Remove</button>
+        <button class="btn btn-ghost btn-sm" data-remove="${poll.id}">Delete</button>
       </div>
     `;
 
@@ -117,16 +106,15 @@ function renderPolls(polls) {
       const removeBtn  = this;
       const actionsDiv = removeBtn.closest('.my-poll-actions');
 
-      // Hide existing action buttons and show inline confirmation
       [...actionsDiv.children].forEach(c => c.classList.add('hidden'));
 
       const label   = document.createElement('span');
       label.style.cssText = 'font-size:0.85rem;color:var(--text-light);align-self:center;';
-      label.textContent   = 'Remove from dashboard?';
+      label.textContent   = 'Delete this poll permanently?';
 
       const yesBtn  = document.createElement('button');
       yesBtn.className   = 'btn btn-ghost btn-sm';
-      yesBtn.textContent = 'Yes, remove';
+      yesBtn.textContent = 'Yes, delete';
 
       const noBtn   = document.createElement('button');
       noBtn.className   = 'btn btn-outline btn-sm';
@@ -143,20 +131,34 @@ function renderPolls(polls) {
         removeBtn.focus();
       });
 
-      yesBtn.addEventListener('click', () => {
-        removePollId(poll.id);
-        allPolls = allPolls.filter(p => p.id !== poll.id);
-        card.classList.add('my-poll-card-exit');
-        card.addEventListener('transitionend', () => {
-          card.remove();
-          if (allPolls.length === 0) {
-            grid.classList.add('hidden');
-            document.getElementById('polls-controls').classList.add('hidden');
-            document.getElementById('dashboard-empty').classList.remove('hidden');
-          } else if (!grid.querySelector('.my-poll-card')) {
-            applyFilters();
-          }
-        }, { once: true });
+      yesBtn.addEventListener('click', async () => {
+        yesBtn.disabled = true;
+        yesBtn.textContent = 'Deleting…';
+        try {
+          const res = await fetch(`/api/polls/${poll.id}`, {
+            method:  'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ uid: activeUid }),
+          });
+          if (!res.ok) throw new Error();
+          allPolls = allPolls.filter(p => p.id !== poll.id);
+          card.classList.add('my-poll-card-exit');
+          card.addEventListener('transitionend', () => {
+            card.remove();
+            const grid = document.getElementById('my-polls-grid');
+            if (allPolls.length === 0) {
+              grid.classList.add('hidden');
+              document.getElementById('polls-controls').classList.add('hidden');
+              document.getElementById('dashboard-empty').classList.remove('hidden');
+            } else if (!grid.querySelector('.my-poll-card')) {
+              applyFilters();
+            }
+          }, { once: true });
+        } catch {
+          showToast('Could not delete poll. Please try again.');
+          yesBtn.disabled    = false;
+          yesBtn.textContent = 'Yes, delete';
+        }
       });
     });
 
@@ -191,7 +193,6 @@ function applyFilters() {
       case 'most-voted': return getTotalVotes(b) - getTotalVotes(a);
       case 'least-voted':return getTotalVotes(a) - getTotalVotes(b);
       case 'last-voted': {
-        // Polls never voted on sink to the bottom
         if (!a.lastVotedAt && !b.lastVotedAt) return 0;
         if (!a.lastVotedAt) return 1;
         if (!b.lastVotedAt) return -1;
@@ -210,7 +211,6 @@ function initControls() {
   const clearBtn   = document.getElementById('search-clear');
   const catFilter  = document.getElementById('category-filter');
 
-  // Populate category dropdown with only the categories present in the user's polls
   const categories = [...new Set(allPolls.map(p => p.category))].sort();
   categories.forEach(cat => {
     const opt = document.createElement('option');
@@ -236,31 +236,35 @@ function initControls() {
 }
 
 // ── Load ──────────────────────────────────────────────────────────────────────
-async function loadDashboard() {
+async function loadDashboard(user) {
   const loading  = document.getElementById('dashboard-loading');
   const empty    = document.getElementById('dashboard-empty');
   const error    = document.getElementById('dashboard-error');
   const controls = document.getElementById('polls-controls');
+  const loginMsg = document.getElementById('dashboard-login');
 
-  const ids = getMyPollIds();
+  // Reset all states
+  loading.classList.add('hidden');
+  empty.classList.add('hidden');
+  error.classList.add('hidden');
+  loginMsg.classList.add('hidden');
+  controls.classList.add('hidden');
+  document.getElementById('my-polls-grid').classList.add('hidden');
+  document.getElementById('my-polls-grid').innerHTML = '';
+  allPolls = [];
 
-  if (ids.length === 0) {
-    loading.classList.add('hidden');
-    empty.classList.remove('hidden');
+  if (!user) {
+    loginMsg.classList.remove('hidden');
     return;
   }
 
-  const idSet = new Set(ids);
+  activeUid = user.uid;
+  loading.classList.remove('hidden');
 
   let networkError = false;
   try {
-    const res  = await fetch('/api/polls');
-    const data = await res.json();
-    allPolls = data.filter(p => idSet.has(p.id));
-
-    // Clean up any stored IDs that no longer exist on the server
-    const foundIds = new Set(allPolls.map(p => p.id));
-    ids.filter(id => !foundIds.has(id)).forEach(removePollId);
+    const res = await fetch(`/api/polls?uid=${encodeURIComponent(user.uid)}`);
+    allPolls  = await res.json();
   } catch {
     networkError = true;
   }
@@ -282,4 +286,5 @@ async function loadDashboard() {
   renderPolls(allPolls);
 }
 
-loadDashboard();
+// ── Boot: wait for Firebase to resolve auth state ─────────────────────────────
+onAuthStateChanged(auth, user => loadDashboard(user));

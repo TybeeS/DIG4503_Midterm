@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - PollView</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="index.html">PollView</a>
+    </div>
+    <div class="nav-links">
+      <a href="my-polls.html">My Polls</a>
+    </div>
+    <div class="nav-auth">
+      <span id="nav-user-email" class="nav-user-email"></span>
+      <button id="nav-logout-btn" class="btn btn-outline btn-sm" style="display:none">Log Out</button>
+      <a id="nav-login-link" href="login.html" class="btn btn-primary btn-sm">Log In</a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1>Create an account</h1>
+      <p class="auth-subtitle">Join PollView to start creating polls</p>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="At least 6 characters" required autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" placeholder="Repeat your password" required autocomplete="new-password">
+        </div>
+        <p class="auth-error" id="error-msg" role="alert"></p>
+        <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">Create Account</button>
+      </form>
+
+      <p class="auth-switch">
+        Already have an account? <a href="login.html">Log in</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { auth } from './firebase-init.js';
+    import { createUserWithEmailAndPassword, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+    // Redirect already-logged-in users
+    onAuthStateChanged(auth, user => {
+      if (user) window.location.href = 'index.html';
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirm-password').value;
+      const errorEl  = document.getElementById('error-msg');
+      const submitBtn = document.getElementById('submit-btn');
+
+      errorEl.textContent = '';
+
+      if (password !== confirm) {
+        errorEl.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      submitBtn.disabled    = true;
+      submitBtn.textContent = 'Creating account…';
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        window.location.href = 'index.html';
+      } catch (err) {
+        errorEl.textContent   = friendlyError(err.code);
+        submitBtn.disabled    = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+
+    function friendlyError(code) {
+      switch (code) {
+        case 'auth/email-already-in-use':  return 'An account with this email already exists.';
+        case 'auth/invalid-email':         return 'Please enter a valid email address.';
+        case 'auth/weak-password':         return 'Password must be at least 6 characters.';
+        default:                           return 'Something went wrong. Please try again.';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -42,9 +42,11 @@ const CATEGORIES = [
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
-// GET /api/polls — list all polls (summary only)
+// GET /api/polls — list all polls (summary only); pass ?uid= to filter by creator
 app.get('/api/polls', (req, res) => {
-  const summary = polls.map(({ id, question, type, category, createdAt, expiresAt, votes, lastVotedAt }) => ({
+  const { uid } = req.query;
+  const source = uid ? polls.filter(p => p.createdBy === uid) : polls;
+  const summary = source.map(({ id, question, type, category, createdAt, expiresAt, votes, lastVotedAt }) => ({
     id, question, type, category, createdAt, expiresAt, votes, lastVotedAt,
   }));
   res.json(summary);
@@ -128,11 +130,25 @@ app.post('/api/polls', async (req, res) => {
     poll.responses = [];
   }
 
+  poll.createdBy   = typeof req.body.createdBy === 'string' ? req.body.createdBy : null;
   poll.lastVotedAt = null;
 
   polls.push(poll);
   await savePolls();
   res.status(201).json(poll);
+});
+
+// DELETE /api/polls/:id — delete a poll (creator only)
+app.delete('/api/polls/:id', async (req, res) => {
+  const { uid } = req.body;
+  const idx = polls.findIndex(p => p.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Poll not found.' });
+  if (!uid || polls[idx].createdBy !== uid) {
+    return res.status(403).json({ error: 'Not authorized.' });
+  }
+  polls.splice(idx, 1);
+  await savePolls();
+  res.json({ success: true });
 });
 
 // POST /api/polls/:id/vote — cast a vote

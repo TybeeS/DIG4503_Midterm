@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "mermaid-expert": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "75b7662b1e33004af2899b69d3a17d79e27d7d87beee84f0d909142ce2175c26"
+    }
+  }
+}

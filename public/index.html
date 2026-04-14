@@ -16,6 +16,11 @@
     <div class="nav-links">
       <a href="my-polls.html">My Polls</a>
     </div>
+    <div class="nav-auth">
+      <span id="nav-user-email" class="nav-user-email"></span>
+      <button id="nav-logout-btn" class="btn btn-outline btn-sm" style="display:none">Log Out</button>
+      <a id="nav-login-link" href="login.html" class="btn btn-primary btn-sm">Log In</a>
+    </div>
     <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
   </nav>
 
@@ -23,7 +28,7 @@
   <header class="hero">
     <div class="hero-content">
       <h1>Create a poll.<br>Share it. See what people think.</h1>
-      <p>No account needed. Build a poll in seconds, share the link with anyone, and watch the results come in live.</p>
+      <p>Build a poll in seconds, share it with anyone, and watch the results come in live.</p>
       <div class="hero-actions">
         <a href="create-poll.html" class="btn btn-accent btn-lg">Create a Poll</a>
         <a href="my-polls.html" class="btn btn-outline btn-lg">My Polls</a>
@@ -59,7 +64,7 @@
     <div class="footer-grid footer-grid-simple">
       <div class="footer-col">
         <h4>PollView</h4>
-        <p>Create polls, share them with anyone, and see results in real time. No account needed.</p>
+        <p>Create polls, share them with anyone, and see results in real time.</p>
       </div>
       <div class="footer-col">
         <h4>Navigate</h4>
@@ -74,5 +79,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="auth-nav.js"></script>
 </body>
 </html>
