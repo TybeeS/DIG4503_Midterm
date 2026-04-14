@@ -1,4 +1,4 @@
-### UPDATE 4/14/26
+### Update 4/14/26
 Included a login feature with user authentication via Firebase. Users register and log in with an email and password. When logged in, any polls you create are saved to your account and appear on the My Polls page.
 
 ## Project Description
