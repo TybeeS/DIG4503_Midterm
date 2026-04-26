@@ -439,7 +439,7 @@ a {
 .footer {
   background: var(--text);
   color: #cbd5e1;
-  padding: 48px 40px 24px;
+  padding: 24px 40px;
 }
 
 .footer-grid {
@@ -475,9 +475,6 @@ a {
 
 .footer-bottom {
   text-align: center;
-  padding-top: 32px;
-  margin-top: 32px;
-  border-top: 1px solid #334155;
   font-size: 0.85rem;
   color: #64748b;
   max-width: 1200px;
